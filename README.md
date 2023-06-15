@@ -1,0 +1,2 @@
+# VoiceVoxClient
+ Web版VOICEVOXライブラリ
