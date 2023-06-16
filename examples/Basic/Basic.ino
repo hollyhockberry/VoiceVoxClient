@@ -86,7 +86,7 @@ void setup() {
   voiceVox.speaker(3);
 
   Serial.println("Speakers:");
-  for (const auto& s : voiceVox.speakers()) {
+  for (const auto& s : voiceVox.speakerNames()) {
     Serial.println(s);
   }
 

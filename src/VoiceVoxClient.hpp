@@ -30,7 +30,8 @@ class VoiceVoxClient {
   void begin();
   void queue(const char* message);
 
-  std::vector<String> speakers() const;
+  std::vector<String> speakerNames() const;
+  String speakerName(int id) const;
 
  private:
   VoiceVoxClient(const VoiceVoxClient&) = delete;

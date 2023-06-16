@@ -87,18 +87,17 @@ void VoiceVoxClient::queue(const char* message) {
   }
 }
 
-std::vector<String> VoiceVoxClient::speakers() const {
+std::vector<String> VoiceVoxClient::speakerNames() const {
   std::vector<String> result;
 
   auto doc = new DynamicJsonDocument(4096);
   auto client = new WiFiClientSecure();
   auto https = new HTTPClient();
 
-  const char* rootCA = _rootCACertificate == nullptr ? ROOT_CA : _rootCACertificate;
-  client->setCACert(rootCA);
-  String url = "https://api.tts.quest/v3/voicevox/speakers_array";
+  client->setInsecure();
+  String url = "https://static.tts.quest/voicevox_speakers.json";
   if (tts_tasks::GetResponseBody(url, *client, *https, *doc)) {
-    for  (const auto& d : (JsonArray)(*doc)["speakers"]) {
+    for  (const auto& d : doc->as<JsonArray>()) {
       result.push_back((const char*)d);
     }
   }
@@ -106,4 +105,23 @@ std::vector<String> VoiceVoxClient::speakers() const {
   delete https;
   delete doc;
   return result;
+}
+
+String VoiceVoxClient::speakerName(int id) const {
+  if (id < 0) {
+    return "";
+  }
+  String payload;
+  auto client = new WiFiClientSecure();
+  auto https = new HTTPClient();
+  client->setInsecure();
+  String url = "https://static.tts.quest/voicevox_speakers_by_id/";
+  url += String(id) + ".txt";
+  if (!tts_tasks::GetResponseBody(url, *client, *https, payload)) {
+    payload = "";
+  }
+  delete client;
+  delete https;
+
+  return payload;
 }

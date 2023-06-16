@@ -11,6 +11,7 @@
 
 namespace tts_tasks {
 
+bool GetResponseBody(const String& url, WiFiClientSecure& client, HTTPClient& https, String& out);
 bool GetResponseBody(const String& url, WiFiClientSecure& client, HTTPClient& https, DynamicJsonDocument& out);
 
 }  // tts_tasks
