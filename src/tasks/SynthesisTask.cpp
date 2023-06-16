@@ -106,7 +106,11 @@ TtsResult GetStreamingUrl(const String& url, String& out, const char* rootCA) {
   auto doc = new DynamicJsonDocument(1024);
   auto client = new WiFiClientSecure();
   auto https = new HTTPClient();
-  client->setCACert(rootCA);
+  if (rootCA) {
+    client->setCACert(rootCA);
+  } else {
+    client->setInsecure();
+  }
   const auto ret = GetStreamingUrl(url, *client, *https, *doc, out);
   delete client;
   delete https;

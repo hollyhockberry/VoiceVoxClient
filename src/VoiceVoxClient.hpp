@@ -13,7 +13,7 @@
 
 class VoiceVoxClient {
   AudioOutput& _output;
-  const char* _rootCACertificate;
+  const char* _rootCACertificate = nullptr;
   String _apiKey;
   tts_tasks::SynthesisTask* _synthesis = nullptr;
   tts_tasks::PlayMp3Task* _playMp3 = nullptr;
