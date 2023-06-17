@@ -13,13 +13,16 @@
 
 class VoiceVoxClient {
   AudioOutput& _output;
-  const char* _rootCACertificate = nullptr;
+  const char* _rootCACertificateApi = nullptr;
+  const char* _rootCACertificateStatic = nullptr;
   String _apiKey;
   tts_tasks::SynthesisTask* _synthesis = nullptr;
   tts_tasks::PlayMp3Task* _playMp3 = nullptr;
 
  public:
-  VoiceVoxClient(AudioOutput& output, const char* rootCACertificate = nullptr);
+  VoiceVoxClient(AudioOutput& output,
+                 const char* rootCACertificateApi = nullptr,
+                 const char* rootCACertificateStatic = nullptr);
 
   bool busy() const;
 

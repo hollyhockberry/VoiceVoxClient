@@ -5,15 +5,17 @@
 #include "VoiceVoxClient.h"
 #include "tasks/utils.h"
 
-VoiceVoxClient::VoiceVoxClient(AudioOutput& output, const char* rootCACertificate)
-: _output(output), _rootCACertificate(rootCACertificate), _apiKey() {
+VoiceVoxClient::VoiceVoxClient(AudioOutput& output, const char* rootCACertificateApi, const char* rootCACertificateStatic)
+: _output(output),
+  _rootCACertificateApi(rootCACertificateApi), _rootCACertificateStatic(rootCACertificateStatic),
+  _apiKey() {
 }
 
 void VoiceVoxClient::begin() {
   auto queue = ::xQueueCreate(1, sizeof(void*));
 
-  _synthesis = new tts_tasks::SynthesisTask(queue, _rootCACertificate);
-  _playMp3 = new tts_tasks::PlayMp3Task(_output, queue, _rootCACertificate);
+  _synthesis = new tts_tasks::SynthesisTask(queue, _rootCACertificateApi);
+  _playMp3 = new tts_tasks::PlayMp3Task(_output, queue, _rootCACertificateApi);
 
   _synthesis->begin();
   _playMp3->begin();
@@ -58,7 +60,7 @@ std::vector<String> VoiceVoxClient::speakerNames() const {
   auto client = new WiFiClientSecure();
   auto https = new HTTPClient();
   String url = "https://static.tts.quest/voicevox_speakers.json";
-  if (tts_tasks::GetResponseBody(url, *client, *https, nullptr, *doc)) {
+  if (tts_tasks::GetResponseBody(url, *client, *https, _rootCACertificateStatic, *doc)) {
     for  (const auto& d : doc->as<JsonArray>()) {
       result.push_back((const char*)d);
     }
@@ -78,7 +80,7 @@ String VoiceVoxClient::speakerName(int id) const {
   auto https = new HTTPClient();
   String url = "https://static.tts.quest/voicevox_speakers_by_id/";
   url += String(id) + ".txt";
-  if (!tts_tasks::GetResponseBody(url, *client, *https, nullptr, payload)) {
+  if (!tts_tasks::GetResponseBody(url, *client, *https, _rootCACertificateStatic, payload)) {
     payload = "";
   }
   delete client;
