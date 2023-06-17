@@ -84,8 +84,10 @@ void MakeUrl(const String& message, const char* apiKey, int speaker, String& out
 
 enum struct TtsResult { SUCCESS, RETRY, ERROR };
 
-TtsResult GetStreamingUrl(const String& url, WiFiClientSecure& client, HTTPClient& https, DynamicJsonDocument& doc, String& out) {
-  if (!GetResponseBody(url, client, https, doc)) {
+TtsResult GetStreamingUrl(const String& url,
+                          WiFiClientSecure& client, HTTPClient& https, const char* rootCA,
+                          DynamicJsonDocument& doc, String& out) {
+  if (!GetResponseBody(url, client, https, rootCA, doc)) {
     return TtsResult::ERROR;
   }
   const bool success = doc["success"];
@@ -106,8 +108,7 @@ TtsResult GetStreamingUrl(const String& url, String& out, const char* rootCA) {
   auto doc = new DynamicJsonDocument(1024);
   auto client = new WiFiClientSecure();
   auto https = new HTTPClient();
-  client->setCACert(rootCA);
-  const auto ret = GetStreamingUrl(url, *client, *https, *doc, out);
+  const auto ret = GetStreamingUrl(url, *client, *https, rootCA, *doc, out);
   delete client;
   delete https;
   delete doc;
