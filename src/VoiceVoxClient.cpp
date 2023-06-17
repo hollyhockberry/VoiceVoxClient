@@ -57,10 +57,8 @@ std::vector<String> VoiceVoxClient::speakerNames() const {
   auto doc = new DynamicJsonDocument(4096);
   auto client = new WiFiClientSecure();
   auto https = new HTTPClient();
-
-  client->setInsecure();
   String url = "https://static.tts.quest/voicevox_speakers.json";
-  if (tts_tasks::GetResponseBody(url, *client, *https, *doc)) {
+  if (tts_tasks::GetResponseBody(url, *client, *https, nullptr, *doc)) {
     for  (const auto& d : doc->as<JsonArray>()) {
       result.push_back((const char*)d);
     }
@@ -78,10 +76,9 @@ String VoiceVoxClient::speakerName(int id) const {
   String payload;
   auto client = new WiFiClientSecure();
   auto https = new HTTPClient();
-  client->setInsecure();
   String url = "https://static.tts.quest/voicevox_speakers_by_id/";
   url += String(id) + ".txt";
-  if (!tts_tasks::GetResponseBody(url, *client, *https, payload)) {
+  if (!tts_tasks::GetResponseBody(url, *client, *https, nullptr, payload)) {
     payload = "";
   }
   delete client;

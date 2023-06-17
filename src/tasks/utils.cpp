@@ -6,7 +6,12 @@
 
 namespace tts_tasks {
 
-bool GetResponseBody(const String& url, WiFiClientSecure& client, HTTPClient& https, String& out) {
+bool GetResponseBody(const String& url, WiFiClientSecure& client, HTTPClient& https, const char* rootCA, String& out) {
+  if (rootCA) {
+    client.setCACert(rootCA);
+  } else {
+    client.setInsecure();
+  }
   if (!https.begin(client, url)) {
     return false;
   }
@@ -16,9 +21,9 @@ bool GetResponseBody(const String& url, WiFiClientSecure& client, HTTPClient& ht
   return true;
 }
 
-bool GetResponseBody(const String& url, WiFiClientSecure& client, HTTPClient& https, DynamicJsonDocument& out) {
+bool GetResponseBody(const String& url, WiFiClientSecure& client, HTTPClient& https, const char* rootCA, DynamicJsonDocument& out) {
   String payload;
-  if (!GetResponseBody(url, client, https, payload)) {
+  if (!GetResponseBody(url, client, https, rootCA, payload)) {
     return false;
   }
   if (::deserializeJson(out, payload.c_str())) {
