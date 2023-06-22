@@ -1,0 +1,25 @@
+{
+  "name": "VoiceVoxClient",
+  "description": "Library for VOICEVOX on web",
+  "keywords": "VOICEVOX",
+  "authors": {
+    "name": "hollyhockberry",
+    "url": "https://github.com/hollyhockberry/VoiceVoxClient"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hollyhockberry/VoiceVoxClient.git"
+  },
+  "dependencies": [
+    {
+      "name": "ArduinoJson",
+      "version": ">=6.21.2"
+    },
+    {
+      "name": "ESP8266Audio",
+      "version": ">=1.9.7"
+    }
+  ],
+  "version": "0.0.0",
+  "headers": "VoiceVoxClient.h"
+}
