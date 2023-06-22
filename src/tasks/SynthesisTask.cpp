@@ -24,7 +24,7 @@ void SynthesisTask::apiKey(const char* key) {
 }
 
 bool SynthesisTask::busy() const {
-  return _busy;
+  return _busy || _queue.size() > 0;
 }
 
 void SynthesisTask::queue(const char* message) {

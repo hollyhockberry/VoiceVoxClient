@@ -18,7 +18,7 @@ PlayMp3Task::PlayMp3Task(AudioOutput& output, QueueHandle_t recvQueue, const cha
 }
 
 bool PlayMp3Task::busy() const {
-  return _busy;
+  return _busy || ::uxQueueSpacesAvailable(_queue) <= 0;
 }
 
 void PlayMp3Task::loop() {  
